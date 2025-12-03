@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Instagram Clone (HTML + CSS)</title>
+  <style>
+    .instagram{
+    
+      background-color:  #833ab4;
+    }
+    /* ---------- Reset & base ---------- */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#fafafa;color:#262626}
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+    .container{max-width:1080px;margin:18px auto;padding:0 16px}
+
+    /* ---------- Top nav ---------- */
+    header.topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 0;background:#d62976;border:1px solid #dbdbdb;border-radius:8px;
+      margin-bottom:18px;
+    }
+    .brand{display:flex;align-items:center;gap:16px}
+    .logo {
+      font-weight:700;letter-spacing:1px;font-size:20px;
+      display:flex;align-items:center;gap:8px;
+    }
+    .logo svg{width:28px;height:28px;opacity:.9}
+    .search {
+      background:white;border:1px solid #efefef;padding:8px 12px;border-radius:8px;
+      width:220px;font-size:14px;color:#999;
+    }
+    .nav-icons{display:flex;gap:14px;align-items:center}
+
+    /* ---------- Layout ---------- */
+    .main{
+      display:grid;
+      grid-template-columns: 640px 1fr;
+      gap:20px;
+      align-items:start;
+    }
+
+    /* ---------- Feed (left) ---------- */
+    .feed{
+      display:flex;flex-direction:column;gap:18px;
+    }
+
+    /* Stories */
+    .stories{
+      background:#405de6;border:1px solid #dbdbdb;padding:12px;border-radius:8px;display:flex;gap:12px;overflow:auto;
+    }
+    .story{flex:0 0 auto;text-align:center;width:82px}
+    .story .avatar{width:66px;height:66px;border-radius:50%;border:3px solid #ffcc80;overflow:hidden;margin:0 auto 8px}
+    .story p{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    /* Post card */
+    .post{background:	#feda75;border:1px solid #dbdbdb;border-radius:8px;overflow:hidden}
+    .post .post-header{display:flex;align-items:center;gap:12px;padding:12px}
+    .post .post-header .avatar{width:42px;height:42px;border-radius:50%;overflow:hidden}
+    .post .post-image{background:#eee}
+    .post .post-actions{display:flex;justify-content:space-between;padding:10px 12px}
+    .icons{display:flex;gap:12px;align-items:center}
+    .icons svg{width:22px;height:22px;vertical-align:middle;opacity:.9}
+    .likes{font-weight:600;padding:0 12px 12px}
+
+    .caption{padding:0 12px 12px;font-size:14px;color:#333}
+    .caption b{font-weight:700;margin-right:6px}
+
+    /* ---------- Sidebar (right) ---------- */
+    aside.sidebar{
+      position:sticky;top:20px;
+      display:flex;flex-direction:column;gap:12px;
+    }
+    .profile-card{display:flex;align-items:center;gap:12px;background: #fcaf45;border:1px solid #dbdbdb;padding:12px;border-radius:8px}
+    .profile-card .avatar{width:64px;height:64px;border-radius:50%;overflow:hidden}
+    .profile-card .meta{flex:1}
+    .meta .name{font-weight:700}
+    .meta .sm{font-size:13px;color:#8e8e8e}
+
+    .suggestions{background: hsl(197, 71%, 45%);border:1px solid #dbdbdb;padding:12px;border-radius:8px}
+    .suggestions h4{font-size:13px;margin-bottom:10px;color:#8e8e8e}
+    .suggest-item{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .suggest-item .left{display:flex;gap:10px;align-items:center}
+    .suggest-item img{width:36px;height:36px;border-radius:50%;overflow:hidden}
+    .suggest-item .action{font-size:13px;color:#0095f6;font-weight:600}
+
+    footer.small{margin-top:12px;font-size:12px;color:#8e8e8e;text-align:center}
+
+    /* ---------- Grid of posts (responsive) ---------- */
+    .grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding-top:6px;border-radius:6px;overflow:hidden;
+    }
+    .grid .cell{background:#ddd;height:240px}
+    @media (max-width:1000px){
+      .main{grid-template-columns:1fr}
+      .grid .cell{height:200px}
+      .container{padding:0 12px}
+    }
+    @media (max-width:420px){
+      .logo{font-size:18px}
+      .search{display:none}
+      .grid .cell{height:140px}
+    }
+
+    /* small helpers */
+    .muted{color:#8e8e8e;font-size:13px}
+
+    .pages{
+      text-align: center;
+      color: gray;
+      height:30px;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="instagram">
+  <div class="container">
+    <!-- TOP NAV -->
+    <header class="topbar" role="banner">
+      <div class="brand">
+        <div class="logo">
+          <!-- simple camera icon -->
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="7" width="18" height="13" rx="2" stroke="#111" stroke-width="1.2"/><circle cx="12" cy="13" r="3.2" stroke="#111" stroke-width="1.2"/><rect x="6" y="4" width="12" height="3" rx="1" stroke="#111" stroke-width="1.2"/></svg>
+          InstaClone
+        </div>
+        <input class="search" placeholder="Search" aria-label="Search"/>
+      </div>
+
+      <div class="nav-icons" aria-hidden="true">
+        <!-- placeholders for nav icons -->
+        <div class="muted">🏠</div>
+        <div class="muted">🔍</div>
+        <div class="muted">➕</div>
+        <div class="muted">❤️</div>
+        <div class="muted">👤</div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- FEED -->
+      <section class="feed" aria-live="polite">
+        <!-- STORIES -->
+        <div class="stories" role="region" aria-label="Stories">
+          <div class="story">
+            <div class="avatar"><img src="https://picsum.photos/seed/s1/80" alt="s1"/></div>
+            <p>your story</p>
+          </div>
+          <div class="story"><div class="avatar"><img src="https://picsum.photos/seed/s2/80" alt="s2"/></div><p>friend_one</p></div>
+          <div class="story"><div class="avatar"><img src="https://picsum.photos/seed/s3/80" alt="s3"/></div><p>photog</p></div>
+          <div class="story"><div class="avatar"><img src="https://picsum.photos/seed/s4/80" alt="s4"/></div><p>travel</p></div>
+          <div class="story"><div class="avatar"><img src="https://picsum.photos/seed/s5/80" alt="s5"/></div><p>food</p></div>
+          <div class="story"><div class="avatar"><img src="https://picsum.photos/seed/s6/80" alt="s6"/></div><p>design</p></div>
+        </div>
+
+        <!-- POST 1 -->
+        <article class="post" aria-labelledby="p1-heading">
+          <div class="post-header">
+            <div class="avatar"><img src="https://picsum.photos/seed/a1/80" alt="author"></div>
+            <div style="flex:1">
+              <div style="font-weight:700">traveler</div>
+              <div class="muted" style="font-size:13px">Kathmandu • 2h</div>
+            </div>
+            <div class="muted">⋯</div>
+          </div>
+
+          <div class="post-image">
+            <img src="https://picsum.photos/seed/post1/900/600" alt="post 1">
+          </div>
+
+          <div class="post-actions">
+            <div class="icons">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12.1 21s-7.6-4.35-9.35-7.1C0.88 9.46 4 6 8.5 6c2.2 0 3.9 1.2 3.9 1.2S14.3 6 16.5 6C21 6 23.12 9.46 21.25 13.9 19.5 17.65 12.1 21 12.1 21z" stroke="#111" stroke-width="1"/></svg>
+              <svg viewBox="0 0 24 24" fill="none"><path d="M2 12l6-6 14 6-14 6-6-6z" stroke="#111" stroke-width="1"/></svg>
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="11.5" cy="11.5" r="1.5" stroke="#111" stroke-width="1.2"/><path d="M2 11.5c1 4 6 8 9.5 8 3.5 0 9.5-4 9.5-8" stroke="#111" stroke-width="1.1"/></svg>
+            </div>
+            <div class="muted">🔖</div>
+          </div>
+
+          <div class="likes">1,234 likes</div>
+
+          <div class="caption" id="p1-heading">
+            <b>traveler</b> A beautiful sunset at the valley. #sunset #travel
+          </div>
+        </article>
+
+        <!-- POST 2 -->
+        <article class="post" aria-labelledby="p2-heading">
+          <div class="post-header">
+            <div class="avatar"><img src="https://picsum.photos/seed/a2/80" alt="author"></div>
+            <div style="flex:1">
+              <div style="font-weight:700">foodie</div>
+              <div class="muted" style="font-size:13px">New Delhi • 15h</div>
+            </div>
+            <div class="muted">⋯</div>
+          </div>
+
+          <div class="post-image">
+            <img src="https://picsum.photos/seed/post2/900/700" alt="post 2">
+          </div>
+
+          <div class="post-actions">
+            <div class="icons">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12.1 21s-7.6-4.35-9.35-7.1C0.88 9.46 4 6 8.5 6c2.2 0 3.9 1.2 3.9 1.2S14.3 6 16.5 6C21 6 23.12 9.46 21.25 13.9 19.5 17.65 12.1 21 12.1 21z" stroke="#111" stroke-width="1"/></svg>
+              <svg viewBox="0 0 24 24" fill="none"><path d="M2 12l6-6 14 6-14 6-6-6z" stroke="#111" stroke-width="1"/></svg>
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="11.5" cy="11.5" r="1.5" stroke="#111" stroke-width="1.2"/><path d="M2 11.5c1 4 6 8 9.5 8 3.5 0 9.5-4 9.5-8" stroke="#111" stroke-width="1.1"/></svg>
+            </div>
+            <div class="muted">🔖</div>
+          </div>
+
+          <div class="likes">879 likes</div>
+
+          <div class="caption" id="p2-heading">
+            <b>foodie</b> Best street food in town — spicy & delicious. 🍜
+          </div>
+        </article>
+
+        <!-- GRID (explore-like) -->
+        <div class="post" style="padding:12px">
+          <div style="font-weight:700;margin-bottom:8px">Explore</div>
+          <div class="grid" role="region" aria-label="explore grid">
+            <div class="cell"><img src="https://picsum.photos/seed/g1/400/400" alt=""></div>
+            <div class="cell"><img src="https://picsum.photos/seed/g2/400/400" alt=""></div>
+            <div class="cell"><img src="https://picsum.photos/seed/g3/400/400" alt=""></div>
+            <div class="cell"><img src="https://picsum.photos/seed/g4/400/400" alt=""></div>
+            <div class="cell"><img src="https://picsum.photos/seed/g5/400/400" alt=""></div>
+            <div class="cell"><img src="https://picsum.photos/seed/g6/400/400" alt=""></div>
+            <div class="cell"><img src="https://picsum.photos/seed/g7/400/400" alt=""></div>
+            <div class="cell"><img src="https://picsum.photos/seed/g8/400/400" alt=""></div>
+            <div class="cell"><img src="https://picsum.photos/seed/g9/400/400" alt=""></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar" aria-label="sidebar">
+        <div class="profile-card">
+          <div class="avatar"><img src="https://picsum.photos/seed/me/120" alt="me"></div>
+          <div class="meta">
+            <div class="name">your_username</div>
+            <div class="sm">Your Name • Edit profile</div>
+          </div>
+        </div>
+
+        <div class="suggestions">
+          <h4>Suggestions for you</h4>
+          <div class="suggest-item"><div class="left"><img src="https://picsum.photos/seed/su1/80"><div><div style="font-weight:700">coffee_shop</div><div class="muted">New</div></div></div><div class="action">Follow</div></div>
+          <div class="suggest-item"><div class="left"><img src="https://picsum.photos/seed/su2/80"><div><div style="font-weight:700">designhub</div><div class="muted">Suggested</div></div></div><div class="action">Follow</div></div>
+          <div class="suggest-item"><div class="left"><img src="https://picsum.photos/seed/su3/80"><div><div style="font-weight:700">wanderlust</div><div class="muted">Popular</div></div></div><div class="action">Follow</div></div>
+        </div>
+
+        <footer class="small">About • Help • Press • API • Jobs • Privacy</footer>
+      </aside>
+    </main>
+  </div>
+  <footer>
+    <div class="foot-panel3">
+        <div class="logo"></div>
+     </div>
+
+        <div class="footpanel4">
+              <div class="pages">
+                <a>Conditions of Use</a>
+                <a>Privacy Notice</a>
+                <a>Your Ads Privacy Choices</a>
+              <div class="copyright">
+                © 1996-2025, Instagram.com, Inc. or its affiliates
+                </div>
+              </div>
+              </div>
+  </footer>
+  </div>
+</body>
+</html>
